@@ -2,7 +2,7 @@ import React, { Component } from "react";
 // import Radium, { StyleRoot } from "radium";
 import "./styles.css";
 import styled from "styled-components";
-import Person from "./Person/Person";
+import Person from "../components/Persons/Person/Person";
 
 /*export default function App(){
   return (
