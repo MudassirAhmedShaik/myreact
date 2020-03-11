@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 // import Radium, { StyleRoot } from "radium";
-import "./styles.css";
-import styled from "styled-components";
-import Person from "../components/Persons/Person/Person";
+import classes from "./App.module.css";
+// import styled from "styled-components";
+import Persons from "../components/Persons/Persons";
+import Cockpit from "../components/Cockpit/Cockpit";
 
 /*export default function App(){
   return (
@@ -13,18 +14,18 @@ import Person from "../components/Persons/Person/Person";
   );
 }*/
 
-const StyledButton = styled.button`
-  background-color: ${props => (props.alt ? "red" : "green")};
-  color: white;
-  border: 1px solid blue;
-  font: inherit;
-  padding: 8px;
-  cursor: pointer;
-  &:hover {
-    background-color: ${props => (props.alt ? "salmon" : "lightgreen")};
-    color: black;
-  }
-`;
+// const StyledButton = styled.button`
+//   background-color: ${props => (props.alt ? "red" : "green")};
+//   color: white;
+//   border: 1px solid blue;
+//   font: inherit;
+//   padding: 8px;
+//   cursor: pointer;
+//   &:hover {
+//     background-color: ${props => (props.alt ? "salmon" : "lightgreen")};
+//     color: black;
+//   }
+// `;
 
 class App extends Component {
   state = {
@@ -74,19 +75,11 @@ class App extends Component {
     let personsList = null;
     if (this.state.showPersons) {
       personsList = (
-        <div>
-          {this.state.persons.map((person, index) => {
-            return (
-              <Person
-                name={person.name}
-                age={person.age}
-                key={person.id}
-                click={() => this.deletePersonHandler(index)}
-                changed={event => this.nameChangedHandler(event, person.id)}
-              />
-            );
-          })}
-        </div>
+        <Persons
+          clicked={this.deletePersonHandler}
+          changed={this.nameChangedHandler}
+          persons={this.state.persons}
+        />
       );
       // style.backgroundColor = "red";
       // style["&:hover"] = {
@@ -94,21 +87,19 @@ class App extends Component {
       //   color: "black"
       // };
     }
-    const classes = [];
-    if (this.state.persons.length <= 2) classes.push("red");
-    if (this.state.persons.length <= 1) classes.push("bold");
+    const AssinedClasses = [];
+    if (this.state.persons.length <= 2) AssinedClasses.push(classes.red);
+    if (this.state.persons.length <= 1) AssinedClasses.push(classes.bold);
 
     return (
       // <StyleRoot>
-      <div className="App">
-        <h1 style={{ fontStyle: "italic" }}>Hi! I'm a React App!!</h1>
-        <p className={classes.join(" ")}>This is really working !</p>
-        <StyledButton
-          alt={this.state.showPersons}
-          onClick={this.togglePersonsHandler}
-        >
-          Toggle Persons
-        </StyledButton>
+      <div className={classes.App}>
+        <Cockpit
+          title={this.props.appTitle}
+          ShowPersons={this.state.showPersons}
+          persons={this.state.persons}
+          clicked={this.togglePersonsHandler}
+        />
         {personsList}
       </div>
       // </StyleRoot>
