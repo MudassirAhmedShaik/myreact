@@ -5,8 +5,9 @@ const Cockpit = props => {
   const AssinedClasses = [];
   let btnClass = "";
   if (props.ShowPersons) btnClass = classes.Red;
-  if (props.persons.length <= 2) AssinedClasses.push(classes.red);
-  if (props.persons.length <= 1) AssinedClasses.push(classes.bold);
+  if (props.personsLength <= 2) AssinedClasses.push(classes.red);
+  if (props.personsLength <= 1) AssinedClasses.push(classes.bold);
+  console.log("[Cockpit.js] rendering....");
   return (
     <div className={classes.Cockpit}>
       <h1 style={{ fontStyle: "italic" }}>{props.title}</h1>
@@ -25,4 +26,4 @@ const Cockpit = props => {
   );
 };
 
-export default Cockpit;
+export default React.memo(Cockpit);

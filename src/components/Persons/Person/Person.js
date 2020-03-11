@@ -3,6 +3,7 @@ import React, { Component } from "react";
 // import "./Person.css";
 // import styled from "styled-components";
 import classes from "./Person.module.css";
+import Auxiliary from "../../../hoc/Auxiliary";
 
 // const StyledDiv = styled.div`
 //   width: 60%;
@@ -21,11 +22,14 @@ class Person extends Component {
   // const style = {
   //   "@media(min-width:400px)": { width: "350px" }
   // };
+
   render() {
     return (
       // <StyledDiv>
       // <div className="Person" style={style}>
-      <div className={classes.Person}>
+      // <React.Fragment>
+      // <div className={classes.Person}>
+      <Auxiliary>
         <p onClick={this.props.click}>
           I'm a {this.props.name} and my age is {this.props.age} years old.
         </p>
@@ -35,7 +39,9 @@ class Person extends Component {
           onChange={this.props.changed}
           value={this.props.name}
         />
-      </div>
+      </Auxiliary>
+      // </div>
+      // </React.Fragment>
       // </StyledDiv>
     );
   }
