@@ -4,6 +4,9 @@ import classes from "./App.module.css";
 // import styled from "styled-components";
 import Persons from "../components/Persons/Persons";
 import Cockpit from "../components/Cockpit/Cockpit";
+import withClass from "../hoc/withClass";
+import Auxiliary from "../hoc/Auxiliary";
+import AuthContext from "../context/auth-context";
 
 /*export default function App(){
   return (
@@ -30,21 +33,26 @@ import Cockpit from "../components/Cockpit/Cockpit";
 class App extends Component {
   state = {
     persons: [
-      { id: 1, name: "Shaik", age: "25" },
-      { id: 2, name: "Ahmed", age: "24" },
-      { id: 3, name: "Mudassir", age: "23" }
+      { id: 1, name: "Shaik", age: 25 },
+      { id: 2, name: "Ahmed", age: 24 },
+      { id: 3, name: "Mudassir", age: 23 }
     ],
     otherdata: "Other data",
     showPersons: false,
-    showCockpit: true
+    showCockpit: true,
+    changeCounter: 0,
+    authenticated: false
   };
 
   nameChangedHandler = (event, id) => {
     const personIndex = this.state.persons.findIndex(p => p.id === id);
     const persons = [...this.state.persons];
     persons[personIndex].name = event.target.value;
-    this.setState({
-      persons: persons
+    this.setState((prevState, props) => {
+      return {
+        persons: persons,
+        changeCounter: prevState.changeCounter + 1
+      };
     });
   };
 
@@ -57,6 +65,9 @@ class App extends Component {
     const persons = [...this.state.persons];
     persons.splice(Index, 1);
     this.setState({ persons: persons });
+  };
+  AuthHandler = () => {
+    this.setState({ authenticated: true });
   };
   shouldComponentUpdate(nextProps, nextState) {
     console.log("[App.js] shouldComponentUpdate");
@@ -83,6 +94,7 @@ class App extends Component {
           clicked={this.deletePersonHandler}
           changed={this.nameChangedHandler}
           persons={this.state.persons}
+          // Auth={this.state.authenticated}
         />
       );
       // style.backgroundColor = "red";
@@ -98,7 +110,8 @@ class App extends Component {
     return (
       // <StyleRoot>
 
-      <div className={classes.App}>
+      // <div className={classes.App}>
+      <Auxiliary>
         <button
           onClick={() => {
             this.setState({ showCockpit: false });
@@ -106,16 +119,25 @@ class App extends Component {
         >
           Remove Cockpit
         </button>
-        {this.state.showCockpit ? (
-          <Cockpit
-            title={this.props.appTitle}
-            ShowPersons={this.state.showPersons}
-            personsLength={this.state.persons.length}
-            clicked={this.togglePersonsHandler}
-          />
-        ) : null}
-        {personsList}
-      </div>
+        <AuthContext.Provider
+          value={{
+            authenticated: this.state.authenticated,
+            login: this.AuthHandler
+          }}
+        >
+          {this.state.showCockpit ? (
+            <Cockpit
+              title={this.props.appTitle}
+              ShowPersons={this.state.showPersons}
+              personsLength={this.state.persons.length}
+              clicked={this.togglePersonsHandler}
+              // AuthClick={this.AuthHandler}
+            />
+          ) : null}
+          {personsList}
+        </AuthContext.Provider>
+      </Auxiliary>
+      // </div>
       // </StyleRoot>
     );
     // return React.createElement(
@@ -127,4 +149,4 @@ class App extends Component {
 }
 
 // export default Radium(App);
-export default App;
+export default withClass(App, classes.App);
